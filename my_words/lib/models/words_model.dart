@@ -2,13 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:my_words/main.dart';
+import 'package:my_words/models/category.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'word.dart';
 
 class WordsModel extends ChangeNotifier {
   List<Word> _words = [];
-
+ List<Category> _categories = [];
   List<Word> get words => _words;
   Set<String> _achievements = {};
 
@@ -35,33 +36,26 @@ class WordsModel extends ChangeNotifier {
     return DateTime(now.year, now.month, now.day);
   }
 
-  void addWord(Word word, BuildContext context) {
-    _words.add(word);
-
-    notifyListeners();
-    _updateLearningStats(word); // Bu satırı ekle
-    _saveWords(); // Save words after adding a new word
-    checkAchievements();
+  void addWord(Word newWord, BuildContext context) {
+   if (newWord.category.isEmpty) {
+    newWord = Word(
+      id: newWord.id,
+      english: newWord.english,
+      turkish: newWord.turkish,
+      example: newWord.example,
+      createdAt: newWord.createdAt,
+      isFavorite: newWord.isFavorite,
+      category: "Kategorisiz",
+    );
   }
+  _words.add(newWord);
+  notifyListeners();
+  _updateLearningStats(newWord); // Bu satırı ekle
+  _saveWords(); // Save words after adding a new word
+  checkAchievements();
+}
 
-  // void _updateLearningStats(Word word, {bool shouldIncrement = true}) {
-  //   final wordDate = word.createdAt;
-  //   final wordDay = DateTime(wordDate.year, wordDate.month, wordDate.day);
-  //   if (_learningStats.containsKey(wordDay)) {
-  //     if (shouldIncrement) {
-  //       _learningStats[wordDay] = _learningStats[wordDay]! + 1;
-  //     } else {
-  //       _learningStats[wordDay] = _learningStats[wordDay]! - 1;
-  //       if (_learningStats[wordDay]! <= 0) {
-  //         _learningStats.remove(wordDay);
-  //       }
-  //     }
-  //   } else {
-  //     if (shouldIncrement) {
-  //       _learningStats[wordDay] = 1;
-  //     }
-  //   }
-  // }
+
   void _updateLearningStats(Word word, {bool shouldIncrement = true}) {
   final wordDate = word.createdAt;
   final wordDay = DateTime(wordDate.year, wordDate.month, wordDate.day);
@@ -111,7 +105,7 @@ class WordsModel extends ChangeNotifier {
   int todayWordCount() {
     DateTime now = DateTime.now();
     DateTime todayStart = DateTime(now.year, now.month, now.day);
-    DateTime todayEnd = todayStart.add(Duration(days: 1));
+    DateTime todayEnd = todayStart.add(const Duration(days: 1));
 
     return words
         .where((word) =>
@@ -201,8 +195,8 @@ class WordsModel extends ChangeNotifier {
     };
   }
 
-  DateTime startDate = _getTodayDate().subtract(Duration(days: 30));
-  DateTime endDate = _getTodayDate();
+  DateTime startDate = _getTodayDate().subtract(const Duration(days: 30));
+  //DateTime endDate = _getTodayDate();
 
   for (int i = 0; i <= 30; i++) {
     DateTime currentDate = startDate.add(Duration(days: i));
@@ -258,7 +252,7 @@ void _updateLearningStatsOnDelete(DateTime date) {
     OverlayEntry overlayEntry = OverlayEntry(builder: (context) {
       return Center(
         child: Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
@@ -267,21 +261,21 @@ void _updateLearningStatsOnDelete(DateTime date) {
                 color: Colors.black.withOpacity(0.1),
                 spreadRadius: 5,
                 blurRadius: 7,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
+              const Icon(
                 Icons.emoji_events_outlined,
                 size: 48,
                 color: Colors.purple,
               ),
               Text(
                 message,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   color: Colors.purple,
                   fontWeight: FontWeight.bold,
@@ -295,18 +289,35 @@ void _updateLearningStatsOnDelete(DateTime date) {
 
     overlayState.insert(overlayEntry);
 
-    Future.delayed(Duration(seconds: 3)).then((value) {
+    Future.delayed(const Duration(seconds: 3)).then((value) {
       overlayEntry.remove();
     });
   }
 
-//   void init() async {
-//   await _loadWords();
-//   await _loadFavorites();
+    List<String> getCategories() {
+    Set<String> categories = {};
+    for (var word in _words) {
+    
+      categories.add(word.category);
+    }
+    return categories.toList();
+  }
 
-//   _loadLearningStats();
-//   notifyListeners();
-// }
+  List<Word> getWordsByCategory(String category) {
+    return _words.where((word) => word.category == category).toList();
+  }
+  List<Word> get allWords {
+  List<Word> combinedWords = [..._words];
+  _categories.forEach((category) {
+    combinedWords.addAll(category.words);
+  });
+  return combinedWords;
+}
+void addUncategorizedWord(Word word) {
+  _words.add(word);
+  notifyListeners();
+}
+
 
   Future<void> init() async {
     await _loadWords();

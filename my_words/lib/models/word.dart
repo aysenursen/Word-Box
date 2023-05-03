@@ -1,10 +1,11 @@
 class Word {
-final int id;
+  final int id;
   final String english;
   final String turkish;
   final String example;
   final DateTime createdAt;
   bool isFavorite;
+  final String category;
 
   Word({
     required this.id,
@@ -13,6 +14,7 @@ final int id;
     required this.example,
     required this.createdAt,
     this.isFavorite = false,
+    required this.category,
   });
 
   factory Word.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,7 @@ final int id;
       turkish: json['turkish'],
       example: json['example'],
       createdAt: DateTime.parse(json['createdAt']),
+      category: json['category'] == null || json['category'].isEmpty ? "Kategorisiz" : json['category'],
     );
   }
 
@@ -32,6 +35,7 @@ final int id;
       'turkish': turkish,
       'example': example,
       'createdAt': createdAt.toIso8601String(),
+      'category': category,
     };
   }
 }

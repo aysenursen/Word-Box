@@ -18,8 +18,10 @@ class _AddWordScreenState extends State<AddWordScreen> {
   final _englishController = TextEditingController();
   final _turkishController = TextEditingController();
   final _exampleController = TextEditingController();
-
+  final _categoryController = TextEditingController();
+  
   void _saveWord() {
+    final enteredCategory = _categoryController.text;
     if (_formKey.currentState!.validate()) {
       final newWord = Word(
         id: DateTime.now().millisecondsSinceEpoch,
@@ -27,6 +29,7 @@ class _AddWordScreenState extends State<AddWordScreen> {
         turkish: _turkishController.text,
         example: _exampleController.text,
         createdAt: DateTime.now(),
+         category: enteredCategory, 
       );
       Provider.of<WordsModel>(context, listen: false).addWord(newWord, context);
       Navigator.pop(context);
@@ -36,8 +39,8 @@ class _AddWordScreenState extends State<AddWordScreen> {
   InputDecoration _inputDecoration({required String labelText}) {
     return InputDecoration(
       labelText: labelText,
-      border: OutlineInputBorder(),
-      focusedBorder: OutlineInputBorder(
+      border: const OutlineInputBorder(),
+      focusedBorder: const OutlineInputBorder(
         borderSide: BorderSide(color: Colors.purple, width: 2.0),
       ),
     );
@@ -47,7 +50,7 @@ class _AddWordScreenState extends State<AddWordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Yeni Kelime Ekle',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -56,7 +59,7 @@ class _AddWordScreenState extends State<AddWordScreen> {
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -70,7 +73,7 @@ class _AddWordScreenState extends State<AddWordScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
                 controller: _turkishController,
                 decoration: _inputDecoration(labelText: 'Türkçe'),
@@ -81,7 +84,7 @@ class _AddWordScreenState extends State<AddWordScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextFormField(
                 controller: _exampleController,
                 decoration: _inputDecoration(labelText: 'Örnek Cümle'),
@@ -92,19 +95,26 @@ class _AddWordScreenState extends State<AddWordScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 32.0),
+              const SizedBox(height: 16.0),
+              TextField(
+                decoration: const InputDecoration(labelText: 'Kategori'),
+                controller: _categoryController,
+              ),
+              const SizedBox(height: 32.0),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _saveWord,
-                  child: Text('Kaydet'),
+                  child: const Text('Kaydet'),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.purple,
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    textStyle: TextStyle(fontSize: 18),
+                    backgroundColor: Colors.purple,
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    textStyle: const TextStyle(fontSize: 18),
                   ),
                 ),
               ),
+               const SizedBox(height: 32.0),
+               const Text('*Kategori girilmeyen kelimeler "Kategorisiz" adlı kategoriye kaydedilecektir.*')
             ],
           ),
         ),

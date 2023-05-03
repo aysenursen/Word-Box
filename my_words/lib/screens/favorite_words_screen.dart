@@ -7,7 +7,7 @@ class FavoriteWordsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Favori Kelimeler',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -24,7 +24,7 @@ class FavoriteWordsScreen extends StatelessWidget {
                 tileColor: index % 2 == 0 ? Colors.purple.shade50 : Colors.white,
                 title: Text(
                   '${word.english.toUpperCase()} - ${word.turkish.toUpperCase()}',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.purple),
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.purple),
                 ),
                 subtitle: Text(
                   word.example,

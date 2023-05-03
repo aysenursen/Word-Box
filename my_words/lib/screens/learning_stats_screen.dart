@@ -8,7 +8,7 @@ class LearningStatsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Öğrenme İstatistiği',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -18,12 +18,12 @@ class LearningStatsScreen extends StatelessWidget {
         future: Provider.of<WordsModel>(context, listen: false).init(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.connectionState == ConnectionState.done) {
             return Consumer<WordsModel>(
               builder: (context, wordsModel, child) {
                 if (wordsModel.learningStats.isEmpty) {
-                  return Center(
+                  return const Center(
                       child: Text('Henüz istatistik verisi bulunmuyor.'));
                 } else {
                   return Padding(
@@ -31,12 +31,12 @@ class LearningStatsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text(
+                        const Text(
                           'Zaman İçinde Öğrenilen Kelimeler',
                           style: TextStyle(
                               fontSize: 28, fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Expanded(
                           child: _buildLearningStatsChart(
                               wordsModel.learningStats),
@@ -48,7 +48,7 @@ class LearningStatsScreen extends StatelessWidget {
               },
             );
           } else {
-            return Center(child: Text('Bir hata oluştu.'));
+            return const Center(child: Text('Bir hata oluştu.'));
           }
         },
       ),
@@ -89,14 +89,14 @@ class LearningStatsScreen extends StatelessWidget {
         titlesData: FlTitlesData(
           leftTitles: SideTitles(
             showTitles: true,
-            getTextStyles: (contex, value) => TextStyle(
+            getTextStyles: (contex, value) => const TextStyle(
               color: Colors.black,
               fontSize: 12,
             ),
           ),
           bottomTitles: SideTitles(
             showTitles: true,
-            getTextStyles: (contex, value) => TextStyle(
+            getTextStyles: (contex, value) => const TextStyle(
               color: Colors.black,
               fontSize: 12,
             ),

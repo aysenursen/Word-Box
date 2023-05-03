@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../states/quiz_state.dart';
 
 class QuizScreen extends StatefulWidget {
+  const QuizScreen({super.key});
+
   @override
   _QuizScreenState createState() => _QuizScreenState();
 }
@@ -32,7 +34,7 @@ class _QuizScreenState extends State<QuizScreen> {
     if (_formKey.currentState!.validate()) {
       if (_quizState.checkAnswer(_answerController.text)) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Doğru!')));
+            .showSnackBar(const SnackBar(content: Text('Doğru!')));
         setState(() {
           _quizState.incrementScore();
           _answerController.clear();
@@ -40,7 +42,7 @@ class _QuizScreenState extends State<QuizScreen> {
         });
       } else {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Yanlış :(')));
+            .showSnackBar(const SnackBar(content: Text('Yanlış :(')));
         setState(() {
           _answerController.clear();
           _quizState.generateNewQuestion();
@@ -56,7 +58,7 @@ class _QuizScreenState extends State<QuizScreen> {
         borderRadius: BorderRadius.circular(10),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.purple, width: 2.0),
+        borderSide: const BorderSide(color: Colors.purple, width: 2.0),
         borderRadius: BorderRadius.circular(10),
       ),
     );
@@ -66,7 +68,7 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'QUIZ',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -77,7 +79,7 @@ class _QuizScreenState extends State<QuizScreen> {
           _quizState.words = wordsModel.words;
           _quizState.generateNewQuestion();
           return Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Form(
               key: _formKey,
               child: Column(
@@ -85,16 +87,16 @@ class _QuizScreenState extends State<QuizScreen> {
                 children: [
                   Text(
                     'Puan: ${_quizState.score}',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   if (_quizState.currentQuestion != null)
                     Text(
                       'İngilizce: ${_quizState.currentQuestion!.english}',
                       style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _answerController,
                     decoration: _inputDecoration(labelText: 'Türkçe Karşılığı'),
@@ -105,16 +107,16 @@ class _QuizScreenState extends State<QuizScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: _checkAnswer,
-                      child: Text('Cevapla'),
+                      child: const Text('Cevapla'),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.purple,
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
-                        textStyle: TextStyle(fontSize: 18),
+                        backgroundColor: Colors.purple,
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        textStyle: const TextStyle(fontSize: 18),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

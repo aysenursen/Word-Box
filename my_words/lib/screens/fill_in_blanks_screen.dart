@@ -56,11 +56,11 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Boşluk Doldurma Oyunu'),
+        title: const Text('Boşluk Doldurma Oyunu'),
         backgroundColor: Colors.purple,
       ),
       body: _currentWord.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -69,17 +69,17 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
                   children: [
                     Text(
                       'Puan: $_score',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Text(
                       'Kelime: $_currentHint',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: _textController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Cevabınızı buraya yazın',
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
@@ -87,15 +87,14 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Center(
                       child: ElevatedButton(
                         onPressed: _checkAnswer,
-                        child: Text('Cevapla'),
+                        child: const Text('Cevapla'),
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.purple,
-                          onPrimary: Colors.white,
-                          textStyle: TextStyle(fontSize: 18),
+                          foregroundColor: Colors.white, backgroundColor: Colors.purple,
+                          textStyle: const TextStyle(fontSize: 18),
                         ),
                       ),
                     ),
@@ -108,12 +107,12 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
 
   void _checkAnswer() {
     if (_textController.text.trim().toLowerCase() == _currentWord.toLowerCase()) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Doğru!'), backgroundColor: Colors.green));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Doğru!'), backgroundColor: Colors.green));
       setState(() {
         _score++;
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Yanlış :('), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Yanlış :('), backgroundColor: Colors.red));
     }
     _textController.clear();
     _generateWord();

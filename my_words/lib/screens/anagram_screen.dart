@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_words/models/anagram_game.dart';
-import 'package:my_words/models/word.dart';
 import 'package:provider/provider.dart';
 import 'package:my_words/models/words_model.dart';
 
 class AnagramScreen extends StatefulWidget {
+  const AnagramScreen({super.key});
+
   @override
   _AnagramScreenState createState() => _AnagramScreenState();
 }
@@ -19,6 +20,11 @@ class _AnagramScreenState extends State<AnagramScreen> {
   void initState() {
     super.initState();
     _anagramGame = AnagramGame(words: []);
+     Future.microtask(() {
+      _anagramGame = AnagramGame(words: context.read<WordsModel>().words);
+      _anagramGame.generateNewQuestion();
+      setState(() {});
+    });
   }
 
   @override
@@ -31,7 +37,7 @@ class _AnagramScreenState extends State<AnagramScreen> {
     if (_formKey.currentState!.validate()) {
       if (_anagramGame.checkAnswer(_answerController.text)) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Doğru!')));
+            .showSnackBar(const SnackBar(content: Text('Doğru!')));
         setState(() {
           _anagramGame.incrementScore();
           _answerController.clear();
@@ -39,7 +45,7 @@ class _AnagramScreenState extends State<AnagramScreen> {
         });
       } else {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Yanlış :(')));
+            .showSnackBar(const SnackBar(content: Text('Yanlış :(')));
         setState(() {
           _answerController.clear();
           _anagramGame.generateNewQuestion();
@@ -52,70 +58,88 @@ class _AnagramScreenState extends State<AnagramScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Anagram Oyunu',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.purple,
+        backgroundColor: const Color(0xFF3a7bd5),
       ),
-      body: Consumer<WordsModel>(
+      body: _anagramGame.words.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          :Consumer<WordsModel>(
         builder: (context, wordsModel, child) {
-          _anagramGame.words = wordsModel.words;
-          _anagramGame.generateNewQuestion();
-          return Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Text(
-                    'Puan: ${_anagramGame.score}',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.purple,
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  if (_anagramGame.currentAnagram.isNotEmpty)
-                    Text(
-                      'Anagram: ${_anagramGame.currentAnagram}',
-                      style: TextStyle(fontSize: 32, color: Colors.purple.shade300),
-                    ),
-                  SizedBox(height: 16),
-                  TextFormField(
-                    controller: _answerController,
-                    decoration: InputDecoration(
-                      labelText: 'Cevabınız',
-                      labelStyle: TextStyle(color: Colors.purple),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.purple, width: 2.0),
-                      ),
-                                            enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.purple, width: 2.0),
+       
+          return Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF3a7bd5), Color(0xFF00d2ff)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Puan: ${_anagramGame.score}',
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Lütfen cevabınızı girin';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _checkAnswer,
-                    child: Text('Cevapla'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.purple,
-                      textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                    const SizedBox(height: 16),
+                    if (_anagramGame.currentAnagram.isNotEmpty)
+                      Text(
+                        'Anagram: ${_anagramGame.currentAnagram}',
+                        style: const TextStyle(fontSize: 32, color: Colors.white),
+                      ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      cursorColor: Colors.white,
+                      controller: _answerController,
+                      decoration: const InputDecoration(
+                        labelText: 'Cevabınız',
+                        labelStyle: TextStyle(color: Colors.white),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                                                  return 'Lütfen cevabınızı girin';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _checkAnswer,
+                      child: const Text('Cevapla'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                        onPrimary: Colors.black,
+                        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          side: const BorderSide(color: Colors.white),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

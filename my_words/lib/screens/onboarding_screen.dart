@@ -15,10 +15,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   await prefs.setBool('onboardingCompleted', true);
 }
 
-  List<Widget> _slides = [
+  final List<Widget> _slides = [
     Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+      children: const [
         Icon(Icons.language, size: 200),
         Text('Kelime Kumbarası', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         Text('İngilizce kelime öğrenmenin kolay yolu', style: TextStyle(fontSize: 16)),
@@ -26,7 +26,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     ),
     Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+      children: const [
         Icon(Icons.quiz, size: 200),
         Text('Quiz ile Öğren', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         Text('Eklediğiniz kelimeleri quiz ile öğrenin', style: TextStyle(fontSize: 16)),
@@ -34,7 +34,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     ),
     Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+      children: const [
         Icon(Icons.favorite, size: 200),
         Text('Favori Kelimeler', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         Text('En çok sevdiğiniz kelimeleri favorilere ekleyin', style: TextStyle(fontSize: 16)),
@@ -53,13 +53,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
    
   _completeOnboarding(); // Onboarding'in tamamlandığını kaydedin
   Navigator.of(context).pushReplacement(
-    MaterialPageRoute(builder: (context) => HomeScreen()),
+    MaterialPageRoute(builder: (context) => const HomeScreen()),
   );
 
 
     if (_currentPage < _slides.length - 1) {
       _pageController.nextPage(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.ease,
       );
     } else {
@@ -92,7 +92,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             left: 20,
             child: TextButton(
               onPressed: _skipToHome,
-              child: Text(
+              child: const Text(
                 'Atla',
                 style: TextStyle(fontSize: 18),
               ),
@@ -105,7 +105,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               onPressed: _nextPage,
               child: Text(
                 _currentPage < _slides.length - 1 ? 'İleri' : 'Başla',
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
             ),
           ),
