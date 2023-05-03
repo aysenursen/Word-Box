@@ -1,7 +1,7 @@
-# my_word_app
+# Word_Box
 learn a word and save this with that app.
-My Word
-My Word is a mobile application built with Dart and Flutter, designed to help users practice their English and Turkish vocabulary through fun and engaging games. The app features a variety of functions, such as creating custom vocabulary lists, playing anagram and fill-in-the-blank games, adding example sentences, and customizing the theme. It also utilizes shared preferences for storage purposes.
+
+Word Box is a mobile application built with Dart and Flutter, designed to help users practice their English and Turkish vocabulary through fun and engaging games. The app features a variety of functions, such as creating custom vocabulary lists, playing anagram and fill-in-the-blank games, adding example sentences, and customizing the theme. It also utilizes shared preferences for storage purposes.
 
 Features
 Vocabulary Management: Easily add English and Turkish words to create custom vocabulary lists for practice.
