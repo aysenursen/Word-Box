@@ -120,16 +120,31 @@ class _HomeScreenState extends State<HomeScreen> {
         content: SingleChildScrollView(
           child: Column(
             children: [
-              for (int themeIndex = 0;
-                  themeIndex < themeModel.availableThemes.length;
-                  themeIndex++)
-                ListTile(
-                  title: Text('Tema ${themeIndex + 1}'),
-                  onTap: () {
-                    themeModel.changeTheme(themeIndex);
-                    Navigator.of(context).pop();
-                  },
-                ),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8.0,
+                runSpacing: 8.0,
+                children: [
+                  for (int themeIndex = 0;
+                      themeIndex < themeModel.availableThemes.length;
+                      themeIndex++)
+                    InkWell(
+                      onTap: () {
+                        themeModel.changeTheme(themeIndex);
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          color: themeModel.availableThemes[themeIndex]
+                              .primaryColor,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ],
           ),
         ),
@@ -137,6 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   );
 }
+
 
 
   Widget _buildDrawerItem(
