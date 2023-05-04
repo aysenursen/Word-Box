@@ -37,24 +37,26 @@ class _AddWordScreenState extends State<AddWordScreen> {
   }
 
   InputDecoration _inputDecoration({required String labelText}) {
+    ThemeData themeData = Theme.of(context);
     return InputDecoration(
       labelText: labelText,
       border: const OutlineInputBorder(),
-      focusedBorder: const OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.purple, width: 2.0),
+      focusedBorder:  OutlineInputBorder(
+        borderSide: BorderSide(color: themeData.primaryColor, width: 2.0),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Yeni Kelime Ekle',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.purple,
+        backgroundColor: themeData.primaryColor,
       ),
       body: Form(
         key: _formKey,
@@ -107,7 +109,7 @@ class _AddWordScreenState extends State<AddWordScreen> {
                   onPressed: _saveWord,
                   child: const Text('Kaydet'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple,
+                    backgroundColor:themeData.primaryColor,
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     textStyle: const TextStyle(fontSize: 18),
                   ),
