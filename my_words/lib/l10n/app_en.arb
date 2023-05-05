@@ -1,0 +1,17 @@
+{
+  "menu": "Menu",
+  "favoriteWords": "Favorite Words",
+  "anagramGame": "Anagram Game",
+  "learningStatistics": "Learning Statistics",
+  "quiz": "Quiz",
+  "fillInTheBlanksGame": "Fill in the Blanks Game",
+  "wordCategories": "Word Categories",
+  "chooseTheme": "Choose Theme",
+  "save": "Save",
+  "exampleSentence": "Example Sentence",
+  "category": "Category",
+  "uncategorized": "*Words without a category will be saved in the 'Uncategorized' category.*",
+  "answer": "Answer",
+  "score": "Score",
+  "writeYourAnswerHere": "Write your answer here"
+}

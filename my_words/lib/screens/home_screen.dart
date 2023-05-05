@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_words/models/theme_model.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:my_words/screens/anagram_screen.dart';
 import 'package:my_words/screens/category_list_screen.dart';
 import 'package:my_words/screens/favorite_words_screen.dart';
@@ -39,9 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
+           DrawerHeader(
             child: Text(
-              'Menü',
+              AppLocalizations.of(context)!.menu,
               style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -58,49 +58,49 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildDrawerItem(
             context: context,
             icon: Icons.favorite,
-            text: 'Favori Kelimeler',
+            text: AppLocalizations.of(context)!.favoriteWords,
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => FavoriteWordsScreen())),
           ),
           _buildDrawerItem(
             context: context,
             icon: Icons.gamepad,
-            text: 'Anagram Oyunu',
+            text: AppLocalizations.of(context)!.anagramGame,
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const AnagramScreen())),
           ),
           _buildDrawerItem(
             context: context,
             icon: Icons.bar_chart,
-            text: 'Öğrenme İstatistikleri',
+            text: AppLocalizations.of(context)!.learningStatistics,
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => LearningStatsScreen())),
           ),
           _buildDrawerItem(
             context: context,
             icon: Icons.quiz,
-            text: 'QUIZ',
+            text: AppLocalizations.of(context)!.quiz,
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const QuizScreen())),
           ),
           _buildDrawerItem(
             context: context,
             icon: Icons.create,
-            text: 'Boşluk Doldurma Oyunu',
+            text: AppLocalizations.of(context)!.fillInTheBlanksGame,
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => FillInTheBlanksGame())),
           ),
           _buildDrawerItem(
             context: context,
             icon: Icons.category,
-            text: 'Kelime Kategori',
+            text: AppLocalizations.of(context)!.wordCategories,
             onTap: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => CategoryListScreen())),
           ),
           _buildDrawerItem(
             context: context,
             icon: Icons.color_lens,
-            text: 'Tema Seç',
+            text: AppLocalizations.of(context)!.chooseTheme,
             onTap: () => _showThemeDialog(context),
           ),
           // Burada yeni kategori için bir öğe ekleyin
@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final themeModel = Provider.of<ThemeModel>(context, listen: false);
 
       return AlertDialog(
-        title: const Text('Tema Seç'),
+        title:  Text(AppLocalizations.of(context)!.chooseTheme),
         content: SingleChildScrollView(
           child: Column(
             children: [

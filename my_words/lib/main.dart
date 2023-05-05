@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_words/models/theme_model.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'screens/home_screen.dart';
 import 'models/words_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
@@ -41,6 +42,16 @@ class KelimeKumbarasiApp extends StatelessWidget {
         return MaterialApp(
           navigatorKey: navigatorKey,
           title: 'Kelime Kumbarası',
+          localizationsDelegates: [
+            AppLocalizations.delegate, // Adım 6'da oluşturulacak sınıf
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en', ''), // İngilizce
+            const Locale('tr', ''), // Türkçe
+          ],
           theme: themeModel.currentTheme,
           home: HomeScreen(),
         );

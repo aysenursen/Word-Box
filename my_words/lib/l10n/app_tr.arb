@@ -1,0 +1,17 @@
+{
+  "menu": "Menü",
+  "favoriteWords": "Favori Kelimeler",
+  "anagramGame": "Anagram Oyunu",
+  "learningStatistics": "Öğrenme İstatistikleri",
+  "quiz": "Quiz",
+  "fillInTheBlanksGame": "Boşluk Doldurma Oyunu",
+  "wordCategories": "Kelime Kategorileri",
+  "chooseTheme": "Tema Seç",
+  "save": "Kaydet",
+  "exampleSentence": "Örnek Cümle",
+  "category": "Kategori",
+  "uncategorized": "*Kategori girilmeyen kelimeler 'Kategorisiz' adlı kategoriye kaydedilecektir.*",
+  "answer": "Cevapla",
+  "score": "Puan",
+  "writeYourAnswerHere": "Cevabınızı buraya yazınız"
+}
