@@ -191,53 +191,65 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildFeatureItem(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 18),
-      ),
-    );
-  }
+  Widget _buildFeatureItem(String text, {required IconData icon}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4.0),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, color: Colors.purple, size: 24),
+        SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
     void _showFeaturesDialog() {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text(
-              'Uygulama Özellikleri',
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.purple),
-            ),
-            content: Column(
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Uygulama Özellikleri',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.purple),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                _buildFeatureItem('1. Anagram oyunu oynayın.'),
-                _buildFeatureItem('2. Kelimeler ekleyin, düzenleyin ve silin.'),
-                _buildFeatureItem('3. İstatistiklerinizi görüntüleyin.'),
-                _buildFeatureItem('4. Favori kelimelerinizi belirleyin.'),
+                _buildFeatureItem('1. Anagram oyunu oynayın.', icon: Icons.gamepad_outlined),
+                _buildFeatureItem('2. Kelimeler ekleyin, düzenleyin ve silin.', icon: Icons.edit_outlined),
+                _buildFeatureItem('3. İstatistiklerinizi görüntüleyin.', icon: Icons.bar_chart),
+                _buildFeatureItem('4. Favori kelimelerinizi belirleyin.', icon: Icons.star_border),
+                _buildFeatureItem('5. Boşluk doldurma oyunu oynayın.', icon: Icons.quiz_outlined),
+                _buildFeatureItem('6. Öğrenme istatistiklerinizi inceleyin.', icon: Icons.analytics_outlined),
+                _buildFeatureItem('7. Kelime kategorileri oluşturun.', icon: Icons.category_outlined),
               ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text(
-                  'Kapat',
-                  style: TextStyle(color: Colors.purple, fontSize: 18),
-                ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'Kapat',
+                style: TextStyle(color: Colors.purple, fontSize: 18),
               ),
-            ],
-          );
-        },
-      );
-    }
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
     ThemeData themeData = Theme.of(context);
     return Scaffold(

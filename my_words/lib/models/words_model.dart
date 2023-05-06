@@ -16,7 +16,7 @@ class WordsModel extends ChangeNotifier {
   WordsModel() {
     fetchWords();
   }
-  Map<DateTime, int> _learningStats = {}; // Bu satırı ekle
+  Map<DateTime, int> _learningStats = {}; 
 
   Map<DateTime, int> get learningStats => _learningStats;
 
@@ -50,8 +50,8 @@ class WordsModel extends ChangeNotifier {
   }
   _words.add(newWord);
   notifyListeners();
-  _updateLearningStats(newWord); // Bu satırı ekle
-  _saveWords(); // Save words after adding a new word
+  _updateLearningStats(newWord); 
+  _saveWords(); 
   checkAchievements();
 }
 
@@ -77,7 +77,7 @@ class WordsModel extends ChangeNotifier {
   void updateWord(Word updatedWord, int index) {
     _words[index] = updatedWord;
     notifyListeners();
-    _saveWords(); // Save words after updating a word
+    _saveWords(); 
   }
 
   Future<void> _saveWords() async {
@@ -123,7 +123,7 @@ class WordsModel extends ChangeNotifier {
     if (index != -1) {
       _words[index].isFavorite = !_words[index].isFavorite;
       notifyListeners();
-      _saveFavorites(); // Save favorites after updating the state
+      _saveFavorites(); 
     }
   }
 
@@ -196,7 +196,7 @@ class WordsModel extends ChangeNotifier {
   }
 
   DateTime startDate = _getTodayDate().subtract(const Duration(days: 30));
-  //DateTime endDate = _getTodayDate();
+ 
 
   for (int i = 0; i <= 30; i++) {
     DateTime currentDate = startDate.add(Duration(days: i));
@@ -205,9 +205,6 @@ class WordsModel extends ChangeNotifier {
     }
   }
 
-  // Hatalı kodları kaldırarak bu satıra kadar değişiklik yaptık.
-
-  // Şimdi bu satırı aşağıdaki gibi değiştirin:
   _learningStats = Map.fromEntries(
     _learningStats.entries.toList()
       ..sort((a, b) => a.key.compareTo(b.key)),
