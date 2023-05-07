@@ -1,0 +1,28 @@
+import 'package:flutter/material.dart';
+
+class FeatureItem extends StatelessWidget {
+  final String text;
+  final IconData icon;
+
+  const FeatureItem({required this.text, required this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: Colors.purple, size: 24),
+          SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              text,
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

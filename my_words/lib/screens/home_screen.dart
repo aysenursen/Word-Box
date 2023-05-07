@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_words/models/theme_model.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:my_words/screens/anagram_screen.dart';
-import 'package:my_words/screens/category_list_screen.dart';
-import 'package:my_words/screens/favorite_words_screen.dart';
-import 'package:my_words/screens/fill_in_blanks_screen.dart';
-import 'package:my_words/screens/learning_stats_screen.dart';
-import 'package:my_words/screens/quiz_screens.dart';
+import 'package:my_words/widgets/drawer.dart';
 import 'package:my_words/widgets/flashcard.dart';
 import 'package:provider/provider.dart';
 
 import 'add_word_screen.dart';
 import '../models/words_model.dart';
+import '../widgets/feature_item.dart';
 
 class HomeScreen extends StatefulWidget {
   static const int dailyTarget = 20;
@@ -23,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // Build progress bar
   Widget _buildProgressBar(int current, int target) {
     return SizedBox(
       height: 8.0,
@@ -34,206 +29,48 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildDrawer(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-           DrawerHeader(
-            child: Text(
-              AppLocalizations.of(context)!.menu,
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF3a7bd5), Color(0xFF00d2ff)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ),
-          _buildDrawerItem(
-            context: context,
-            icon: Icons.favorite,
-            text: AppLocalizations.of(context)!.favoriteWords,
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => FavoriteWordsScreen())),
-          ),
-          _buildDrawerItem(
-            context: context,
-            icon: Icons.gamepad,
-            text: AppLocalizations.of(context)!.anagramGame,
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const AnagramScreen())),
-          ),
-          _buildDrawerItem(
-            context: context,
-            icon: Icons.bar_chart,
-            text: AppLocalizations.of(context)!.learningStatistics,
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => LearningStatsScreen())),
-          ),
-          _buildDrawerItem(
-            context: context,
-            icon: Icons.quiz,
-            text: AppLocalizations.of(context)!.quiz,
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const QuizScreen())),
-          ),
-          _buildDrawerItem(
-            context: context,
-            icon: Icons.create,
-            text: AppLocalizations.of(context)!.fillInTheBlanksGame,
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => FillInTheBlanksGame())),
-          ),
-          _buildDrawerItem(
-            context: context,
-            icon: Icons.category,
-            text: AppLocalizations.of(context)!.wordCategories,
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => CategoryListScreen())),
-          ),
-          _buildDrawerItem(
-            context: context,
-            icon: Icons.color_lens,
-            text: AppLocalizations.of(context)!.chooseTheme,
-            onTap: () => _showThemeDialog(context),
-          ),
-          // Burada yeni kategori için bir öğe ekleyin
-        ],
-      ),
-    );
+  // Build features list
+  List<Widget> _buildFeaturesList() {
+    return [
+      FeatureItem(
+          text: '1. Anagram oyunu oynayın.', icon: Icons.gamepad_outlined),
+      FeatureItem(
+          text: '2. Kelimeler ekleyin, düzenleyin ve silin.',
+          icon: Icons.edit_outlined),
+      FeatureItem(
+          text: '3. İstatistiklerinizi görüntüleyin.', icon: Icons.bar_chart),
+      FeatureItem(
+          text: '4. Favori kelimelerinizi belirleyin.',
+          icon: Icons.star_border),
+      FeatureItem(
+          text: '5. Boşluk doldurma oyunu oynayın.', icon: Icons.quiz_outlined),
+      FeatureItem(
+          text: '6. Öğrenme istatistiklerinizi inceleyin.',
+          icon: Icons.analytics_outlined),
+      FeatureItem(
+          text: '7. Kelime kategorileri oluşturun.',
+          icon: Icons.category_outlined),
+    ];
   }
 
-  void _showThemeDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      final themeModel = Provider.of<ThemeModel>(context, listen: false);
-
-      return AlertDialog(
-        title:  Text(AppLocalizations.of(context)!.chooseTheme),
-        content: SingleChildScrollView(
-          child: Column(
-            children: [
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 8.0,
-                runSpacing: 8.0,
-                children: [
-                  for (int themeIndex = 0;
-                      themeIndex < themeModel.availableThemes.length;
-                      themeIndex++)
-                    InkWell(
-                      onTap: () {
-                        themeModel.changeTheme(themeIndex);
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24),
-                          color: themeModel.availableThemes[themeIndex]
-                              .primaryColor,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
-
-
-
-  Widget _buildDrawerItem(
-      {required BuildContext context,
-      required IconData icon,
-      required String text,
-      required VoidCallback onTap,
-      ThemeData? themeData}) {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            gradient: const LinearGradient(
-              colors: [Color(0xFF3a7bd5), Color(0xFF00d2ff)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-          margin: const EdgeInsets.symmetric(vertical: 4),
-          child: ListTile(
-            tileColor: Colors.transparent,
-            leading: Icon(icon, color: Colors.white),
-            title: Text(
-              text,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
-            ),
-            onTap: onTap,
-          ),
-        ),
-        const Divider(),
-      ],
-    );
-  }
-
-  Widget _buildFeatureItem(String text, {required IconData icon}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 4.0),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, color: Colors.purple, size: 24),
-        SizedBox(width: 8),
-        Flexible(
-          child: Text(
-            text,
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-  @override
-  Widget build(BuildContext context) {
-    void _showFeaturesDialog() {
+  // Show features dialog
+  void _showFeaturesDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text(
             'Uygulama Özellikleri',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.purple),
+            style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.purple),
           ),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildFeatureItem('1. Anagram oyunu oynayın.', icon: Icons.gamepad_outlined),
-                _buildFeatureItem('2. Kelimeler ekleyin, düzenleyin ve silin.', icon: Icons.edit_outlined),
-                _buildFeatureItem('3. İstatistiklerinizi görüntüleyin.', icon: Icons.bar_chart),
-                _buildFeatureItem('4. Favori kelimelerinizi belirleyin.', icon: Icons.star_border),
-                _buildFeatureItem('5. Boşluk doldurma oyunu oynayın.', icon: Icons.quiz_outlined),
-                _buildFeatureItem('6. Öğrenme istatistiklerinizi inceleyin.', icon: Icons.analytics_outlined),
-                _buildFeatureItem('7. Kelime kategorileri oluşturun.', icon: Icons.category_outlined),
-              ],
+              children: _buildFeaturesList(),
             ),
           ),
           actions: [
@@ -250,70 +87,28 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-    ThemeData themeData = Theme.of(context);
-    return Scaffold(
-      drawer: _buildDrawer(context),
-      appBar: AppBar(
-        backgroundColor: themeData.appBarTheme.foregroundColor,
-        title: const Text(
-          'Kelime Kumbarası',
-          style: TextStyle(color: Colors.white),
+  // Build app bar
+  AppBar _buildAppBar(ThemeData themeData) {
+    return AppBar(
+      backgroundColor: themeData.appBarTheme.foregroundColor,
+      title: const Text(
+        'Kelime Kumbarası',
+        style: TextStyle(color: Colors.white),
+      ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.help_outline, color: Colors.white),
+          onPressed: _showFeaturesDialog,
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.help_outline, color: Colors.white),
-            onPressed: _showFeaturesDialog,
-          ),
-        ],
-      ),
-      body: Consumer<WordsModel>(
-        builder: (context, wordsModel, child) {
-          int todayWordCount = wordsModel.todayWordCount();
-          return wordsModel.allWords.length == 0
-              ? const Center(
-                  child: Text(
-                  "             '+' Tuşuna Basarak\n Ekrana Kelime Eklemeyi Deneyin.",
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.purple),
-                ))
-              : Column(
-                  children: [
-                    _buildProgressBar(todayWordCount, HomeScreen.dailyTarget),
-                    Expanded(
-                      child: ListView.separated(
-                        itemCount: wordsModel.allWords.length,
-                        itemBuilder: (context, index) {
-                          final word = wordsModel.allWords[index];
-                          return Flashcard(
-                            englishWord: word.english,
-                            turkishWord: word.turkish,
-                            example: word.example,
-                            index: index,
-                            isFavorite: word.isFavorite,
-                            onFavoriteChanged: (bool isFavorite) {
-                              setState(() {});
-                              wordsModel.toggleFavorite(word);
-                            },
-                            onDelete: () {
-                              wordsModel.removeWord(index);
-                            },
-                            cardColor: themeData.primaryColor,
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) =>
-                            const Divider(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
+      ],
+    );
+  }
+
+  // Build floating action button
+  Widget _buildFloatingActionButton(ThemeData themeData) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
@@ -323,6 +118,70 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: themeData.iconTheme.color,
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  // Build body content
+  Widget _buildBodyContent(WordsModel wordsModel, ThemeData themeData) {
+    int todayWordCount = wordsModel.todayWordCount();
+
+    if (wordsModel.allWords.length == 0) {
+      return const Center(
+        child: Text(
+          "             '+' Tuşuna Basarak\n Ekrana Kelime Eklemeyi Deneyin.",
+          style: TextStyle(
+              fontSize: 24, fontWeight: FontWeight.bold, color: Colors.purple),
+        ),
+      );
+    } else {
+      return Column(
+        children: [
+          _buildProgressBar(todayWordCount, HomeScreen.dailyTarget),
+          Expanded(
+            child: ListView.separated(
+              itemCount: wordsModel.allWords.length,
+              itemBuilder: (context, index) {
+                final word = wordsModel.allWords[index];
+                return Flashcard(
+                  englishWord: word.english,
+                  turkishWord: word.turkish,
+                  example: word.example,
+                  index: index,
+                  isFavorite: word.isFavorite,
+                  onFavoriteChanged: (bool isFavorite) {
+                    setState(() {});
+                    wordsModel.toggleFavorite(word);
+                  },
+                  onDelete: () {
+                    wordsModel.removeWord(index);
+                  },
+                  cardColor: themeData.primaryColor,
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
+
+    return Scaffold(
+      drawer: buildDrawer(context),
+      appBar: _buildAppBar(themeData),
+      body: Consumer<WordsModel>(
+        builder: (context, wordsModel, child) =>
+            _buildBodyContent(wordsModel, themeData),
+      ),
+      floatingActionButton: _buildFloatingActionButton(themeData),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
