@@ -10,10 +10,11 @@ class CategoryWordsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('$category Kelimeler'),
-        backgroundColor: Colors.purple,
+        backgroundColor: themeData.primaryColor,
       ),
       body: Consumer<WordsModel>(
         builder: (context, wordsModel, child) {
@@ -27,7 +28,7 @@ class CategoryWordsScreen extends StatelessWidget {
                   '${index + 1}. ${word.english.toUpperCase()} - ${word.turkish.toUpperCase()}',
                   style: TextStyle(
                       fontSize: 21,
-                      color: Colors.purple.shade900,
+                      color: themeData.textSelectionTheme.cursorColor,
                       fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text('Örnek: ${word.example}'),
@@ -42,4 +43,3 @@ class CategoryWordsScreen extends StatelessWidget {
     );
   }
 }
-

@@ -27,9 +27,25 @@ class ThemeModel extends ChangeNotifier {
   // Temaları bir dizi içinde saklama
   List<ThemeData> availableThemes = [
     ThemeData.light(),
-    ThemeData.dark(),
-    ThemeData(primarySwatch: Colors.green),
-    ThemeData(primarySwatch: Colors.purple),
+    ThemeData.dark().copyWith(
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: Colors.white,
+      ),
+    ),
+    ThemeData(
+      primarySwatch: Colors.green,
+      brightness: Brightness.light,
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: Colors.green,
+      ),
+    ),
+    ThemeData(
+      primarySwatch: Colors.purple,
+      brightness: Brightness.light,
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: Colors.purple,
+      ),
+    ),
   ];
 
   // Mevcut temayı değiştiren bir fonksiyon

@@ -7,10 +7,11 @@ import 'package:provider/provider.dart';
 class CategoryListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kategoriler'),
-        backgroundColor: Colors.purple,
+        backgroundColor: themeData.primaryColor,
       ),
       body: Consumer<WordsModel>(
         builder: (context, wordsModel, child) {
@@ -21,7 +22,7 @@ class CategoryListScreen extends StatelessWidget {
               return ListTile(
                 title: Text(
                   categories[index],
-                  style: TextStyle(fontSize: 21, color: Colors.purple.shade900),
+                  style: TextStyle(fontSize: 21, color:themeData.textSelectionTheme.cursorColor),
                 ),
                 onTap: () {
                   Navigator.push(
@@ -48,7 +49,7 @@ class CategoryListScreen extends StatelessWidget {
             MaterialPageRoute(builder: (context) => AddWordScreen()),
           );
         },
-        backgroundColor: Colors.purple,
+        backgroundColor:themeData.primaryColor,
         child: const Icon(Icons.add),
       ),
     );

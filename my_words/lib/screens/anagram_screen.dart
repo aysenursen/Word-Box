@@ -56,13 +56,14 @@ class _AnagramScreenState extends State<AnagramScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Anagram Oyunu',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color(0xFF3a7bd5),
+        backgroundColor:themeData.primaryColor,
       ),
       body: _anagramGame.words.isEmpty
           ? Center(child: CircularProgressIndicator())
@@ -70,12 +71,8 @@ class _AnagramScreenState extends State<AnagramScreen> {
         builder: (context, wordsModel, child) {
        
           return Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF3a7bd5), Color(0xFF00d2ff)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+            decoration:  BoxDecoration(
+              color: themeData.primaryColor
             ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),

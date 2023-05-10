@@ -90,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Build app bar
   AppBar _buildAppBar(ThemeData themeData) {
     return AppBar(
+      
       backgroundColor: themeData.appBarTheme.foregroundColor,
       title: const Text(
         'Kelime Kumbarası',
@@ -124,13 +125,15 @@ class _HomeScreenState extends State<HomeScreen> {
   // Build body content
   Widget _buildBodyContent(WordsModel wordsModel, ThemeData themeData) {
     int todayWordCount = wordsModel.todayWordCount();
-
+    
     if (wordsModel.allWords.length == 0) {
-      return const Center(
+      
+      return  Center(
         child: Text(
-          "             '+' Tuşuna Basarak\n Ekrana Kelime Eklemeyi Deneyin.",
+          "'+' Tuşuna Basarak\n Ekrana Kelime Eklemeyi Deneyin.",
+          textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 24, fontWeight: FontWeight.bold, color: Colors.purple),
+              fontSize: 24, fontWeight: FontWeight.bold, color: themeData.textSelectionTheme.cursorColor),
         ),
       );
     } else {
@@ -172,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
-
+    
     return Scaffold(
       drawer: buildDrawer(context),
       appBar: _buildAppBar(themeData),

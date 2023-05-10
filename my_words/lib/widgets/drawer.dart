@@ -54,6 +54,7 @@ import 'package:provider/provider.dart';
 }
 
 Widget buildDrawer(BuildContext context) {
+  ThemeData themeData = Theme.of(context);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -68,7 +69,7 @@ Widget buildDrawer(BuildContext context) {
             ),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF3a7bd5), Color(0xFF00d2ff)],
+                colors: [themeData.primaryColor, Color(0xFF00d2ff)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -134,13 +135,14 @@ Widget buildDrawerItem(
       required String text,
       required VoidCallback onTap,
       ThemeData? themeData}) {
+        ThemeData themeData = Theme.of(context);
     return Column(
       children: [
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            gradient: const LinearGradient(
-              colors: [Color(0xFF3a7bd5), Color(0xFF00d2ff)],
+            gradient:  LinearGradient(
+              colors: [themeData.primaryColor, Color(0xFF00d2ff)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
