@@ -32,22 +32,22 @@ class _HomeScreenState extends State<HomeScreen> {
   // Build features list
   List<Widget> _buildFeaturesList() {
     return [
-      FeatureItem(
+      const FeatureItem(
           text: '1. Anagram oyunu oynayın.', icon: Icons.gamepad_outlined),
-      FeatureItem(
+      const FeatureItem(
           text: '2. Kelimeler ekleyin, düzenleyin ve silin.',
           icon: Icons.edit_outlined),
-      FeatureItem(
+      const FeatureItem(
           text: '3. İstatistiklerinizi görüntüleyin.', icon: Icons.bar_chart),
-      FeatureItem(
+      const FeatureItem(
           text: '4. Favori kelimelerinizi belirleyin.',
           icon: Icons.star_border),
-      FeatureItem(
+      const FeatureItem(
           text: '5. Boşluk doldurma oyunu oynayın.', icon: Icons.quiz_outlined),
-      FeatureItem(
+      const FeatureItem(
           text: '6. Öğrenme istatistiklerinizi inceleyin.',
           icon: Icons.analytics_outlined),
-      FeatureItem(
+      const FeatureItem(
           text: '7. Kelime kategorileri oluşturun.',
           icon: Icons.category_outlined),
     ];
@@ -88,22 +88,40 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Build app bar
-  AppBar _buildAppBar(ThemeData themeData) {
-    return AppBar(
-      
-      backgroundColor: themeData.appBarTheme.foregroundColor,
-      title: const Text(
-        'Kelime Kumbarası',
-        style: TextStyle(color: Colors.white),
-      ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.help_outline, color: Colors.white),
-          onPressed: _showFeaturesDialog,
+PreferredSize _buildAppBar(ThemeData themeData) {
+  return PreferredSize(
+    preferredSize: const Size.fromHeight(kToolbarHeight+5),
+    child: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [themeData.primaryColor, Colors.blue], // Gradient renklerini kendi renklerinizle değiştirin
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-      ],
-    );
-  }
+      ),
+      child: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(0,16,0,0),
+          child: const Center(
+            child: Text(
+              'Kelime Kumbarası',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: Colors.white),
+            onPressed: _showFeaturesDialog,
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
 
   // Build floating action button
   Widget _buildFloatingActionButton(ThemeData themeData) {

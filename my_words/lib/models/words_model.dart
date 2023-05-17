@@ -9,14 +9,14 @@ import 'word.dart';
 
 class WordsModel extends ChangeNotifier {
   List<Word> _words = [];
- List<Category> _categories = [];
+  List<Category> _categories = [];
   List<Word> get words => _words;
   Set<String> _achievements = {};
 
   WordsModel() {
     fetchWords();
   }
-  Map<DateTime, int> _learningStats = {}; 
+  Map<DateTime, int> _learningStats = {};
 
   Map<DateTime, int> get learningStats => _learningStats;
 
@@ -37,47 +37,45 @@ class WordsModel extends ChangeNotifier {
   }
 
   void addWord(Word newWord, BuildContext context) {
-   if (newWord.category.isEmpty) {
-    newWord = Word(
-      id: newWord.id,
-      english: newWord.english,
-      turkish: newWord.turkish,
-      example: newWord.example,
-      createdAt: newWord.createdAt,
-      isFavorite: newWord.isFavorite,
-      category: "Kategorisiz",
-    );
+    if (newWord.category.isEmpty) {
+      newWord = Word(
+        id: newWord.id,
+        english: newWord.english,
+        turkish: newWord.turkish,
+        example: newWord.example,
+        createdAt: newWord.createdAt,
+        isFavorite: newWord.isFavorite,
+        category: "Kategorisiz",
+      );
+    }
+    _words.add(newWord);
+    notifyListeners();
+    _updateLearningStats(newWord);
+    _saveWords();
+    checkAchievements();
   }
-  _words.add(newWord);
-  notifyListeners();
-  _updateLearningStats(newWord); 
-  _saveWords(); 
-  checkAchievements();
-}
-
 
   void _updateLearningStats(Word word, {bool shouldIncrement = true}) {
-  final wordDate = word.createdAt;
-  final wordDay = DateTime(wordDate.year, wordDate.month, wordDate.day);
+    final wordDate = word.createdAt;
+    final wordDay = DateTime(wordDate.year, wordDate.month, wordDate.day);
 
-  if (shouldIncrement) {
-    if (_learningStats.containsKey(wordDay)) {
-      _learningStats[wordDay] = _learningStats[wordDay]! + 1;
+    if (shouldIncrement) {
+      if (_learningStats.containsKey(wordDay)) {
+        _learningStats[wordDay] = _learningStats[wordDay]! + 1;
+      } else {
+        _learningStats[wordDay] = 1;
+      }
     } else {
-      _learningStats[wordDay] = 1;
-    }
-  } else {
-    if (_learningStats.containsKey(wordDay) && _learningStats[wordDay]! > 0) {
-      _learningStats[wordDay] = _learningStats[wordDay]! - 1;
+      if (_learningStats.containsKey(wordDay) && _learningStats[wordDay]! > 0) {
+        _learningStats[wordDay] = _learningStats[wordDay]! - 1;
+      }
     }
   }
-}
-
 
   void updateWord(Word updatedWord, int index) {
     _words[index] = updatedWord;
     notifyListeners();
-    _saveWords(); 
+    _saveWords();
   }
 
   Future<void> _saveWords() async {
@@ -88,19 +86,18 @@ class WordsModel extends ChangeNotifier {
   }
 
   Future<void> removeWord(int index) async {
-  Word removedWord = _words[index];
-  _updateLearningStats(removedWord, shouldIncrement: false);
-  _words.removeAt(index);
+    Word removedWord = _words[index];
+    _updateLearningStats(removedWord, shouldIncrement: false);
+    _words.removeAt(index);
 
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setStringList(
-      'wordsData', _words.map((word) => jsonEncode(word.toJson())).toList());
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setStringList(
+        'wordsData', _words.map((word) => jsonEncode(word.toJson())).toList());
 
-  _saveLearningStats();
+    _saveLearningStats();
 
-  notifyListeners();
-}
-
+    notifyListeners();
+  }
 
   int todayWordCount() {
     DateTime now = DateTime.now();
@@ -123,7 +120,7 @@ class WordsModel extends ChangeNotifier {
     if (index != -1) {
       _words[index].isFavorite = !_words[index].isFavorite;
       notifyListeners();
-      _saveFavorites(); 
+      _saveFavorites();
     }
   }
 
@@ -168,79 +165,58 @@ class WordsModel extends ChangeNotifier {
     await prefs.setStringList('learningStats', learningStatsJson);
   }
 
-  // Future<void> _loadLearningStats() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   List<String>? learningStatsData = prefs.getStringList('learningStats');
-
-  //   if (learningStatsData != null) {
-  //     List<dynamic> learningStatsJson =
-  //         learningStatsData.cast<String>().map(jsonDecode).toList();
-  //     _learningStats = {
-  //       for (var json in learningStatsJson)
-  //         DateTime.parse(json['date']): json['count']
-  //     };
-  //   }
-  // }
-
   Future<void> _loadLearningStats() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  List<String>? learningStatsData = prefs.getStringList('learningStats');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? learningStatsData = prefs.getStringList('learningStats');
 
-  if (learningStatsData != null) {
-    List<dynamic> learningStatsJson =
-        learningStatsData.cast<String>().map(jsonDecode).toList();
-    _learningStats = {
-      for (var json in learningStatsJson)
-        DateTime.parse(json['date']): json['count']
-    };
-  }
-
-  DateTime startDate = _getTodayDate().subtract(const Duration(days: 30));
- 
-
-  for (int i = 0; i <= 30; i++) {
-    DateTime currentDate = startDate.add(Duration(days: i));
-    if (!_learningStats.containsKey(currentDate)) {
-      _learningStats[currentDate] = 0;
+    if (learningStatsData != null) {
+      List<dynamic> learningStatsJson =
+          learningStatsData.cast<String>().map(jsonDecode).toList();
+      _learningStats = {
+        for (var json in learningStatsJson)
+          DateTime.parse(json['date']): json['count']
+      };
     }
+
+    DateTime startDate = _getTodayDate().subtract(const Duration(days: 30));
+
+    for (int i = 0; i <= 30; i++) {
+      DateTime currentDate = startDate.add(Duration(days: i));
+      if (!_learningStats.containsKey(currentDate)) {
+        _learningStats[currentDate] = 0;
+      }
+    }
+
+    _learningStats = Map.fromEntries(
+      _learningStats.entries.toList()..sort((a, b) => a.key.compareTo(b.key)),
+    );
   }
-
-  _learningStats = Map.fromEntries(
-    _learningStats.entries.toList()
-      ..sort((a, b) => a.key.compareTo(b.key)),
-  );
-}
-
-
-
-
 
   // words_model.dart dosyasında WordsModel sınıfına bu işlevi ekleyin
 // words_model.dart dosyasında WordsModel sınıfına bu işlevi ekleyin
-void _updateLearningStatsOnDelete(DateTime date) {
-  DateTime dateOnly = DateTime(date.year, date.month, date.day);
-  if (_learningStats.containsKey(dateOnly)) {
-    _learningStats[dateOnly] = _learningStats[dateOnly]! - 1;
-    if (_learningStats[dateOnly] == 0) {
-      _learningStats.remove(dateOnly);
+  void _updateLearningStatsOnDelete(DateTime date) {
+    DateTime dateOnly = DateTime(date.year, date.month, date.day);
+    if (_learningStats.containsKey(dateOnly)) {
+      _learningStats[dateOnly] = _learningStats[dateOnly]! - 1;
+      if (_learningStats[dateOnly] == 0) {
+        _learningStats.remove(dateOnly);
+      }
+      notifyListeners();
     }
-    notifyListeners();
   }
-}
-
-
 
   void checkAchievements() {
     int wordCount = _words.length;
-    if (15>wordCount && wordCount >= 10 && !_achievements.contains('Yeni Başlayan')) {
+    if (15 > wordCount &&
+        wordCount >= 10 &&
+        !_achievements.contains('Yeni Başlayan')) {
       _achievements.add('Yeni Başlayan');
       showMotivationMessage('Tebrikler 10 Kelime Kaydettin!');
-    }
-    else if(wordCount >= 50 && !_achievements.contains('ORTA Başlayan')){
-       _achievements.add('ORTA Başlayan');
+    } else if (wordCount >= 50 && !_achievements.contains('ORTA Başlayan')) {
+      _achievements.add('ORTA Başlayan');
       showMotivationMessage('Tebrikler 50 Kelime Kaydettin!');
     }
-    // Diğer başarımlar için benzer koşullar ekleyin
+    // Diğer başarımlar için benzer koşullar ekle
   }
 
   void showMotivationMessage(String message) {
@@ -291,10 +267,9 @@ void _updateLearningStatsOnDelete(DateTime date) {
     });
   }
 
-    List<String> getCategories() {
+  List<String> getCategories() {
     Set<String> categories = {};
     for (var word in _words) {
-    
       categories.add(word.category);
     }
     return categories.toList();
@@ -303,18 +278,19 @@ void _updateLearningStatsOnDelete(DateTime date) {
   List<Word> getWordsByCategory(String category) {
     return _words.where((word) => word.category == category).toList();
   }
-  List<Word> get allWords {
-  List<Word> combinedWords = [..._words];
-  _categories.forEach((category) {
-    combinedWords.addAll(category.words);
-  });
-  return combinedWords;
-}
-void addUncategorizedWord(Word word) {
-  _words.add(word);
-  notifyListeners();
-}
 
+  List<Word> get allWords {
+    List<Word> combinedWords = [..._words];
+    _categories.forEach((category) {
+      combinedWords.addAll(category.words);
+    });
+    return combinedWords;
+  }
+
+  void addUncategorizedWord(Word word) {
+    _words.add(word);
+    notifyListeners();
+  }
 
   Future<void> init() async {
     await _loadWords();

@@ -19,43 +19,52 @@ void main() async {
         ChangeNotifierProvider<WordsModel>.value(value: wordsModel),
         ChangeNotifierProvider<ThemeModel>(create: (_) => ThemeModel()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ThemeModel(),
-      child: KelimeKumbarasiApp(),
+    return SafeArea(
+      child: ChangeNotifierProvider(
+        create: (context) => ThemeModel(),
+        child: const KelimeKumbarasiApp(),
+      ),
     );
   }
 }
 
 class KelimeKumbarasiApp extends StatelessWidget {
+  const KelimeKumbarasiApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeModel>(
-      builder: (context, themeModel, child) {
-        return MaterialApp(
-          navigatorKey: navigatorKey,
-          title: 'Kelime Kumbarası',
-          localizationsDelegates: [
-            AppLocalizations.delegate, // Adım 6'da oluşturulacak sınıf
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [
-            const Locale('en', ''), // İngilizce
-            const Locale('tr', ''), // Türkçe
-          ],
-          theme: themeModel.currentTheme,
-          home: HomeScreen(),
-        );
-      },
+    return SafeArea(
+      child: Consumer<ThemeModel>(
+        builder: (context, themeModel, child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            navigatorKey: navigatorKey,
+            title: 'Kelime Kumbarası',
+            localizationsDelegates: const [
+              AppLocalizations.delegate, // Adım 6'da oluşturulacak sınıf
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en', ''), // İngilizce
+              Locale('tr', ''), // Türkçe
+            ],
+            theme: themeModel.currentTheme,
+            home: const HomeScreen(),
+          );
+        },
+      ),
     );
   }
 }

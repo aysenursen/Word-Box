@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_words/models/word.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../models/words_model.dart';
@@ -104,10 +104,12 @@ class _AddWordScreenState extends State<AddWordScreen> {
               ),
               const SizedBox(height: 32.0),
               SizedBox(
+                
+                
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _saveWord,
-                  child: const Text('Kaydet'),
+                  child:  Text(AppLocalizations.of(context)!.save),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:themeData.primaryColor,
                     padding: const EdgeInsets.symmetric(vertical: 16.0),

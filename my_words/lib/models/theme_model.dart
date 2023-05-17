@@ -28,21 +28,21 @@ class ThemeModel extends ChangeNotifier {
   List<ThemeData> availableThemes = [
     ThemeData.light(),
     ThemeData.dark().copyWith(
-      textSelectionTheme: TextSelectionThemeData(
+      textSelectionTheme: const TextSelectionThemeData(
         cursorColor: Colors.white,
       ),
     ),
     ThemeData(
       primarySwatch: Colors.green,
       brightness: Brightness.light,
-      textSelectionTheme: TextSelectionThemeData(
+      textSelectionTheme: const TextSelectionThemeData(
         cursorColor: Colors.green,
       ),
     ),
     ThemeData(
       primarySwatch: Colors.purple,
       brightness: Brightness.light,
-      textSelectionTheme: TextSelectionThemeData(
+      textSelectionTheme: const TextSelectionThemeData(
         cursorColor: Colors.purple,
       ),
     ),

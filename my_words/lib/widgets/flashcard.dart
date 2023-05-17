@@ -49,13 +49,37 @@ class _FlashcardState extends State<Flashcard>
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
+    double deviceHeightScale = 0;
+    if(screenHeight >= 667.0 && screenHeight <=685)
+    {
+      deviceHeightScale = 0.25;
+    }
+    else if(screenHeight>=736 && screenHeight <=812){
+      deviceHeightScale = 0.23;
+    }
+    else if(screenHeight>=844 && screenHeight <= 852){
+      deviceHeightScale = 0.215;
+    }
+    else if(screenHeight>=880 && screenHeight<=920)
+    {
+      deviceHeightScale = 0.20;
+    }
+    else if(screenHeight>=921 && screenHeight<=935)
+    {
+      deviceHeightScale=0.19;
+    }
+    print("yükseklik: "+screenHeight.toString());
+    print("genişlik: " + screenWidth.toString());
+    setState(() {
+      print(deviceHeightScale);
+    });
     return ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: screenWidth * 0.3,
-          maxHeight: screenHeight * 0.2,
+          maxWidth: screenWidth,
+          maxHeight: screenHeight * deviceHeightScale,
         ),
         child: Card(
           elevation: 4,
@@ -74,7 +98,7 @@ class _FlashcardState extends State<Flashcard>
                 end: Alignment.bottomRight,
               ),
             ),
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+            padding: const EdgeInsets.fromLTRB(4,12, 4, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -111,7 +135,7 @@ class _FlashcardState extends State<Flashcard>
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                //const SizedBox(height: 8),
                 Center(
                   child: AnimatedSwitcher(
                     duration: Duration(milliseconds: 200),
@@ -123,44 +147,53 @@ class _FlashcardState extends State<Flashcard>
                       );
                     },
                     child: _showBackSide
-                        ? Text(
-                            widget.turkishWord.toUpperCase(),
-                            style: TextStyle(
-                              fontSize: screenWidth * 0.05,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white.withOpacity(0.85),
+                        ? Expanded(
+                            child: Text(
+                              widget.turkishWord.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: screenWidth * 0.05,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white.withOpacity(0.85),
+                              ),
+                              textAlign: TextAlign.center,
+                              key: ValueKey('backSide'),
                             ),
-                            textAlign: TextAlign.center,
-                            key: ValueKey('backSide'),
                           )
-                        : Text(
-                            widget.englishWord.toUpperCase(),
-                            style: TextStyle(
-                              fontSize: screenWidth * 0.05,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                        : Expanded(
+                            child: Text(
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              widget.englishWord.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: screenWidth * 0.05,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                              key: ValueKey('frontSide'),
                             ),
-                            textAlign: TextAlign.center,
-                            key: ValueKey('frontSide'),
                           ),
                   ),
                 ),
-                SizedBox(height: screenWidth * 0.035),
+                SizedBox(height: screenWidth * 0.005),
                 Center(
                   child: Text(
                     'Cümle: ' + widget.example.toUpperCase(),
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontWeight: FontWeight.w300,
+                      fontSize: screenWidth * 0.035,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 8),
+                 const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.delete,
-                        size: 28,
+                        size: screenHeight * 0.035,
                       ),
                       color: Colors.white,
                       onPressed: widget.onDelete,
@@ -168,7 +201,7 @@ class _FlashcardState extends State<Flashcard>
                     IconButton(
                       icon: Icon(
                         _showBackSide ? Icons.rotate_left : Icons.rotate_right,
-                        size: 42,
+                        size: screenHeight * 0.055,
                       ),
                       color: themeData.iconTheme.color,
                       onPressed: _toggleSide,
