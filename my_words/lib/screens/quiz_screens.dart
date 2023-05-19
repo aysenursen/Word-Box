@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_words/models/theme_model.dart';
 import 'package:my_words/models/words_model.dart';
 import 'package:provider/provider.dart';
 
@@ -54,52 +55,77 @@ class _QuizScreenState extends State<QuizScreen> {
   InputDecoration _inputDecoration({required String labelText}) {
     return InputDecoration(
       labelText: labelText,
+      filled: true,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10.0),
+        borderSide: BorderSide(),
       ),
+      labelStyle: TextStyle(color: Colors.white),
       focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.purple, width: 2.0),
-        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Colors.white),
+        borderRadius: BorderRadius.circular(10.0),
       ),
     );
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
+    final themeModel = Provider.of<ThemeModel>(context);
+    ThemeData themeData = themeModel.currentTheme;
+    TextTheme textTheme = themeData.textTheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'QUIZ',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: textTheme.headline6?.copyWith(color: themeData.colorScheme.onPrimary),
         ),
-        backgroundColor: Colors.purple,
+        backgroundColor: themeData.primaryColor,
       ),
       body: Consumer<WordsModel>(
         builder: (context, wordsModel, child) {
           _quizState.words = wordsModel.words;
           _quizState.generateNewQuestion();
-          return Padding(
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [themeData.primaryColorLight, themeData.primaryColorDark],
+              ),
+            ),
             padding: const EdgeInsets.all(16.0),
             child: Form(
               key: _formKey,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
+                  Spacer(),
+                  CircleAvatar(
+                    radius: 100,
+                    backgroundColor: Colors.white70,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.question_answer, size: 50, color: themeData.primaryColor),
+                        Text(
                     'Puan: ${_quizState.score}',
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    style: textTheme.displayLarge?.copyWith(color: themeData.primaryColor, fontSize: 24),
                   ),
-                  const SizedBox(height: 16),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 48),
                   if (_quizState.currentQuestion != null)
                     Text(
-                      'İngilizce: ${_quizState.currentQuestion!.english}',
-                      style:
-                          const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      'Question: ${_quizState.currentQuestion!.english.toUpperCase()}',
+                      style: textTheme.headline5?.copyWith(color: Colors.white, fontSize: 24),
                     ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 32),
                   TextFormField(
                     controller: _answerController,
                     decoration: _inputDecoration(labelText: 'Türkçe Karşılığı'),
+                    style: textTheme.bodyText1?.copyWith(color: Colors.white),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Lütfen Türkçe karşılığını girin';
@@ -112,17 +138,22 @@ class _QuizScreenState extends State<QuizScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: _checkAnswer,
-                      child: const Text('Cevapla'),
+                      child: Text(
+                        'Cevapla',
+                        style: textTheme.button?.copyWith(color: themeData.colorScheme.onPrimary),
+                      ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple,
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        textStyle: const TextStyle(fontSize: 18),
+                        primary: themeData.primaryColor,
+                        onPrimary: themeData.colorScheme.onPrimary,
+                        padding: const                         EdgeInsets.symmetric(vertical: 16.0),
+                        textStyle: TextStyle(fontSize: 20),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
                   ),
+                  Spacer(),
                 ],
               ),
             ),

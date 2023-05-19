@@ -12,6 +12,8 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
   String _currentWord = '';
   String _currentHint = '';
   int _score = 0;
+  int _currentIndex = -1;
+  int _previousIndex = -1;
   TextEditingController _textController = TextEditingController();
 
   @override
@@ -33,8 +35,17 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
     final random = Random();
 
     if (wordsModel.words.isNotEmpty) {
-      final word = wordsModel.words[random.nextInt(wordsModel.words.length)].english;
+      int newIndex;
+      do {
+        newIndex = random.nextInt(wordsModel.words.length);
+      } while (newIndex == _currentIndex || newIndex == _previousIndex);
+      
+      _previousIndex = _currentIndex;
+      _currentIndex = newIndex;
+
+      final word = wordsModel.words[_currentIndex].english;
       final hint = _generateHint(word);
+
       setState(() {
         _currentWord = word;
         _currentHint = hint;
@@ -118,4 +129,3 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
     _generateWord();
   }
 }
-

@@ -57,10 +57,13 @@ class _FlashcardState extends State<Flashcard>
     {
       deviceHeightScale = 0.25;
     }
-    else if(screenHeight>=736 && screenHeight <=812){
+    else if(screenHeight>=686 && screenHeight <=725){
+      deviceHeightScale = 0.24;
+    }
+    else if(screenHeight>=736 && screenHeight <=843){
       deviceHeightScale = 0.23;
     }
-    else if(screenHeight>=844 && screenHeight <= 852){
+    else if(screenHeight>=844 && screenHeight <= 879){
       deviceHeightScale = 0.215;
     }
     else if(screenHeight>=880 && screenHeight<=920)
@@ -71,11 +74,14 @@ class _FlashcardState extends State<Flashcard>
     {
       deviceHeightScale=0.19;
     }
+    else{
+      deviceHeightScale = 0.285;
+    }
     print("yükseklik: "+screenHeight.toString());
     print("genişlik: " + screenWidth.toString());
-    setState(() {
+    // setState(() {
       print(deviceHeightScale);
-    });
+    // });
     return ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: screenWidth,
@@ -199,6 +205,7 @@ class _FlashcardState extends State<Flashcard>
                       onPressed: widget.onDelete,
                     ),
                     IconButton(
+                      padding: EdgeInsets.fromLTRB(0, 0, 16, 0),
                       icon: Icon(
                         _showBackSide ? Icons.rotate_left : Icons.rotate_right,
                         size: screenHeight * 0.055,
