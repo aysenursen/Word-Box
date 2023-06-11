@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_words/widgets/drawer.dart';
 import 'package:my_words/widgets/flashcard.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'add_word_screen.dart';
 import '../models/words_model.dart';
 import '../widgets/feature_item.dart';
@@ -32,23 +32,23 @@ class _HomeScreenState extends State<HomeScreen> {
   // Build features list
   List<Widget> _buildFeaturesList() {
     return [
-      const FeatureItem(
-          text: '1. Anagram oyunu oynayın.', icon: Icons.gamepad_outlined),
-      const FeatureItem(
-          text: '2. Kelimeler ekleyin, düzenleyin ve silin.',
+      FeatureItem(
+          text: AppLocalizations.of(context)!.play_anagram_game,
+          icon: Icons.gamepad_outlined),
+      FeatureItem(
+          text: AppLocalizations.of(context)!.add_edit_delete_words,
           icon: Icons.edit_outlined),
-      const FeatureItem(
-          text: '3. İstatistiklerinizi görüntüleyin.', icon: Icons.bar_chart),
-      const FeatureItem(
-          text: '4. Favori kelimelerinizi belirleyin.',
+      FeatureItem(
+          text: AppLocalizations.of(context)!.examine_your_learning_statistics,
+          icon: Icons.bar_chart),
+      FeatureItem(
+          text: AppLocalizations.of(context)!.determine_your_favorite_words,
           icon: Icons.star_border),
-      const FeatureItem(
-          text: '5. Boşluk doldurma oyunu oynayın.', icon: Icons.quiz_outlined),
-      const FeatureItem(
-          text: '6. Öğrenme istatistiklerinizi inceleyin.',
-          icon: Icons.analytics_outlined),
-      const FeatureItem(
-          text: '7. Kelime kategorileri oluşturun.',
+      FeatureItem(
+          text: AppLocalizations.of(context)!.play_fill_in_the_blank_game,
+          icon: Icons.quiz_outlined),
+      FeatureItem(
+          text: AppLocalizations.of(context)!.create_word_categories,
           icon: Icons.category_outlined),
     ];
   }
@@ -59,9 +59,9 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
-            'Uygulama Özellikleri',
-            style: TextStyle(
+          title: Text(
+            AppLocalizations.of(context)!.app_features,
+            style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.purple),
@@ -76,9 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text(
-                'Kapat',
-                style: TextStyle(color: Colors.purple, fontSize: 18),
+              child: Text(
+                AppLocalizations.of(context)!.close,
+                style: const TextStyle(color: Colors.purple, fontSize: 18),
               ),
             ),
           ],
@@ -88,40 +88,42 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Build app bar
-PreferredSize _buildAppBar(ThemeData themeData) {
-  return PreferredSize(
-    preferredSize: const Size.fromHeight(kToolbarHeight+5),
-    child: Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [themeData.primaryColor, Colors.blue], // Gradient renklerini kendi renklerinizle değiştirin
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+  PreferredSize _buildAppBar(ThemeData themeData) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(kToolbarHeight + 5),
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              themeData.primaryColor,
+              Colors.blue
+            ], // Gradient renklerini kendi renklerinizle değiştirin
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
-      ),
-      child: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Padding(
-          padding: const EdgeInsets.fromLTRB(0,16,0,0),
-          child: const Center(
-            child: Text(
-              'Kelime Kumbarası',
-              style: TextStyle(color: Colors.white),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: const Padding(
+            padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
+            child: Center(
+              child: Text(
+                'Word Box',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.help_outline, color: Colors.white),
+              onPressed: _showFeaturesDialog,
+            ),
+          ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.help_outline, color: Colors.white),
-            onPressed: _showFeaturesDialog,
-          ),
-        ],
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   // Build floating action button
   Widget _buildFloatingActionButton(ThemeData themeData) {
@@ -131,7 +133,7 @@ PreferredSize _buildAppBar(ThemeData themeData) {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddWordScreen()),
+            MaterialPageRoute(builder: (context) => const AddWordScreen()),
           );
         },
         backgroundColor: themeData.iconTheme.color,
@@ -143,15 +145,18 @@ PreferredSize _buildAppBar(ThemeData themeData) {
   // Build body content
   Widget _buildBodyContent(WordsModel wordsModel, ThemeData themeData) {
     int todayWordCount = wordsModel.todayWordCount();
-    
+
     if (wordsModel.allWords.length == 0) {
-      
-      return  Center(
+      return Center(
         child: Text(
-          "'+' Tuşuna Basarak\n Ekrana Kelime Eklemeyi Deneyin.",
+          AppLocalizations.of(context)!.press_plus +
+              "\n" +
+              AppLocalizations.of(context)!.try_adding_words,
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: 24, fontWeight: FontWeight.bold, color: themeData.textSelectionTheme.cursorColor),
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: themeData.textSelectionTheme.cursorColor),
         ),
       );
     } else {
@@ -193,7 +198,7 @@ PreferredSize _buildAppBar(ThemeData themeData) {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
-    
+
     return Scaffold(
       drawer: buildDrawer(context),
       appBar: _buildAppBar(themeData),

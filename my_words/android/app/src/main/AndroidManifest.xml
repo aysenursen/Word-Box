@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.my_words">
+    package="com.omer_erdogan.word_box">
    <application
         android:label="Word Box"
         android:name="${applicationName}"

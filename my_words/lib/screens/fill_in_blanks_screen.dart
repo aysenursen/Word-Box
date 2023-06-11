@@ -2,6 +2,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:my_words/models/words_model.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../models/theme_model.dart';
 
 class FillInTheBlanksGame extends StatefulWidget {
   @override
@@ -39,7 +42,7 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
       do {
         newIndex = random.nextInt(wordsModel.words.length);
       } while (newIndex == _currentIndex || newIndex == _previousIndex);
-      
+
       _previousIndex = _currentIndex;
       _currentIndex = newIndex;
 
@@ -67,7 +70,7 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Boşluk Doldurma Oyunu'),
+        title: Text(AppLocalizations.of(context)!.fill_in_the_blank_game),
         backgroundColor: Colors.purple,
       ),
       body: _currentWord.isEmpty
@@ -79,22 +82,26 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Puan: $_score',
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      AppLocalizations.of(context)!.score + ' : $_score',
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Kelime: $_currentHint',
-                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      AppLocalizations.of(context)!.word + ': $_currentHint',
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       controller: _textController,
-                      decoration: const InputDecoration(
-                        hintText: 'Cevabınızı buraya yazın',
-                        border: OutlineInputBorder(),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.purple, width: 2.0),
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)!
+                            .write_your_answer_here,
+                        border: const OutlineInputBorder(),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.purple, width: 2.0),
                         ),
                       ),
                     ),
@@ -102,9 +109,10 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
                     Center(
                       child: ElevatedButton(
                         onPressed: _checkAnswer,
-                        child: const Text('Cevapla'),
+                        child: Text(AppLocalizations.of(context)!.your_answer),
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white, backgroundColor: Colors.purple,
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.purple,
                           textStyle: const TextStyle(fontSize: 18),
                         ),
                       ),
@@ -117,13 +125,73 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
   }
 
   void _checkAnswer() {
-    if (_textController.text.trim().toLowerCase() == _currentWord.toLowerCase()) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Doğru!'), backgroundColor: Colors.green));
+    final themeModel = Provider.of<ThemeModel>(context, listen: false);
+    ThemeData themeData = themeModel.currentTheme;
+
+    if (_textController.text.trim().toLowerCase() ==
+        _currentWord.toLowerCase()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          content: Row(
+            children: [
+              Icon(
+                Icons.check_circle,
+                color: themeData.colorScheme.onSecondary,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                'Doğru!',
+                style: TextStyle(
+                  color: themeData.colorScheme.onSecondary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: themeData.colorScheme.secondary,
+          duration: Duration(seconds: 1),
+        ),
+      );
       setState(() {
         _score++;
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Yanlış :('), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          content: Row(
+            children: [
+              Icon(
+                Icons.error,
+                color: themeData.colorScheme.onError,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                'Yanlış :(',
+                style: TextStyle(
+                  color: themeData.colorScheme.onError,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: themeData.colorScheme.error,
+          duration: Duration(seconds: 1),
+        ),
+      );
     }
     _textController.clear();
     _generateWord();

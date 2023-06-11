@@ -17,7 +17,7 @@ void _showThemeDialog(BuildContext context) {
       final themeModel = Provider.of<ThemeModel>(context, listen: false);
 
       return AlertDialog(
-        title:  Text(AppLocalizations.of(context)!.chooseTheme),
+        title:  Text(AppLocalizations.of(context)!.select_theme),
         content: SingleChildScrollView(
           child: Column(
             children: [
@@ -63,8 +63,8 @@ void _showWarningDialog(BuildContext context) {
           borderRadius: BorderRadius.circular(15),
         ),
         title: Text(
-          'Dikkat!',
-          style: TextStyle(
+          AppLocalizations.of(context)!.alert,
+          style: const TextStyle(
             color: Colors.red,
             fontWeight: FontWeight.bold,
             fontSize: 24,
@@ -75,15 +75,15 @@ void _showWarningDialog(BuildContext context) {
             children: <Widget>[
               RichText(
                 text: TextSpan(
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     color: Colors.black54,
                   ),
                   children: <TextSpan>[
-                    TextSpan(text: 'QUIZ, BOŞLUK DOLDURMA ve ANAGRAM oyunlarına başlamadan önce '),
+                    TextSpan(text: AppLocalizations.of(context)!.before_games),
                     TextSpan(
-                      text: 'en az 3 kelime eklemelisiniz.',
-                      style: TextStyle(
+                      text: AppLocalizations.of(context)!.must_add_words,
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -96,10 +96,10 @@ void _showWarningDialog(BuildContext context) {
         ),
         actions: <Widget>[
           TextButton(
-            child: Text(
-              'Tamam',
+            child: const Text(
+              'OKEY',
               style: TextStyle(
-                color: Colors.blue,
+                color: Colors.red,
                 fontSize: 18,
               ),
             ),
@@ -127,14 +127,14 @@ Widget buildDrawer(BuildContext context) {
          DrawerHeader(
           child: Text(
             AppLocalizations.of(context)!.menu,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white),
           ),
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [themeData.primaryColor, Color(0xFF00d2ff)],
+              colors: [themeData.primaryColor, const Color(0xFF00d2ff)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -143,14 +143,14 @@ Widget buildDrawer(BuildContext context) {
         buildDrawerItem(
           context: context,
           icon: Icons.favorite,
-          text: AppLocalizations.of(context)!.favoriteWords,
+          text: AppLocalizations.of(context)!.favorite_words,
           onTap: () => Navigator.push(context,
               MaterialPageRoute(builder: (context) => FavoriteWordsScreen())),
         ),
         buildDrawerItem(
           context: context,
           icon: Icons.gamepad,
-          text: AppLocalizations.of(context)!.anagramGame,
+          text: AppLocalizations.of(context)!.anagram_game,
           onTap: wordCount < 3 
             ? () => _showWarningDialog(context)
             : () => Navigator.push(context,
@@ -159,7 +159,7 @@ Widget buildDrawer(BuildContext context) {
         buildDrawerItem(
           context: context,
           icon: Icons.bar_chart,
-          text: AppLocalizations.of(context)!.learningStatistics,
+          text: AppLocalizations.of(context)!.learning_statistic,
           onTap: () => Navigator.push(context,
               MaterialPageRoute(builder: (context) => LearningStatsScreen())),
         ),
@@ -175,7 +175,7 @@ Widget buildDrawer(BuildContext context) {
         buildDrawerItem(
           context: context,
           icon: Icons.create,
-          text: AppLocalizations.of(context)!.fillInTheBlanksGame,
+          text: AppLocalizations.of(context)!.fill_in_the_blank_game,
           onTap: wordCount < 3 
             ? () => _showWarningDialog(context)
             : () => Navigator.push(context,
@@ -184,14 +184,14 @@ Widget buildDrawer(BuildContext context) {
         buildDrawerItem(
           context: context,
           icon: Icons.category,
-          text: AppLocalizations.of(context)!.wordCategories,
+          text: AppLocalizations.of(context)!.word_categories,
           onTap: () => Navigator.push(context,
               MaterialPageRoute(builder: (context) => CategoryListScreen())),
         ),
         buildDrawerItem(
           context: context,
           icon: Icons.color_lens,
-          text: AppLocalizations.of(context)!.chooseTheme,
+          text: AppLocalizations.of(context)!.select_theme,
           onTap: () => _showThemeDialog(context),
         ),
       ],
@@ -212,7 +212,7 @@ Widget buildDrawerItem(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           gradient:  LinearGradient(
-            colors: [themeData.primaryColor, Color(0xFF00d2ff)],
+            colors: [themeData.primaryColor, const Color(0xFF00d2ff)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

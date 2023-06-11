@@ -3,6 +3,7 @@ import 'package:my_words/models/words_model.dart';
 import 'package:my_words/screens/add_word_screen.dart';
 import 'package:my_words/screens/category_words_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CategoryListScreen extends StatelessWidget {
   @override
@@ -10,7 +11,7 @@ class CategoryListScreen extends StatelessWidget {
     ThemeData themeData = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Kategoriler'),
+        title:  Text(AppLocalizations.of(context)!.categories),
         backgroundColor: themeData.primaryColor,
       ),
       body: Consumer<WordsModel>(

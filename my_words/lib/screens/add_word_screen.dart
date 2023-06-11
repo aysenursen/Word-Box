@@ -8,7 +8,7 @@ import '../models/words_model.dart';
 class AddWordScreen extends StatefulWidget {
   final Word? editWord;
   final int? editIndex;
-  AddWordScreen({this.editWord, this.editIndex});
+  const AddWordScreen({this.editWord, this.editIndex});
   @override
   _AddWordScreenState createState() => _AddWordScreenState();
 }
@@ -52,9 +52,9 @@ class _AddWordScreenState extends State<AddWordScreen> {
     ThemeData themeData = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Yeni Kelime Ekle',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        title: Text(
+           AppLocalizations.of(context)!.add_new_word,
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: themeData.primaryColor,
       ),
@@ -67,10 +67,10 @@ class _AddWordScreenState extends State<AddWordScreen> {
             children: [
               TextFormField(
                 controller: _englishController,
-                decoration: _inputDecoration(labelText: 'İngilizce'),
+                decoration: _inputDecoration(labelText: AppLocalizations.of(context)!.english),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Lütfen bir değer girin';
+                    return 'Please enter new value';
                   }
                   return null;
                 },
@@ -78,10 +78,10 @@ class _AddWordScreenState extends State<AddWordScreen> {
               const SizedBox(height: 16.0),
               TextFormField(
                 controller: _turkishController,
-                decoration: _inputDecoration(labelText: 'Türkçe'),
+                decoration: _inputDecoration(labelText: 'Native'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Lütfen bir değer girin';
+                    return 'Please enter new value';
                   }
                   return null;
                 },
@@ -89,17 +89,17 @@ class _AddWordScreenState extends State<AddWordScreen> {
               const SizedBox(height: 16.0),
               TextFormField(
                 controller: _exampleController,
-                decoration: _inputDecoration(labelText: 'Örnek Cümle'),
+                decoration: _inputDecoration(labelText: AppLocalizations.of(context)!.example_sentence),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Lütfen bir değer girin';
+                    return 'Please enter new value';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 16.0),
               TextField(
-                decoration: const InputDecoration(labelText: 'Kategori'),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.category),
                 controller: _categoryController,
               ),
               const SizedBox(height: 32.0),
@@ -118,7 +118,7 @@ class _AddWordScreenState extends State<AddWordScreen> {
                 ),
               ),
                const SizedBox(height: 32.0),
-               const Text('*Kategori girilmeyen kelimeler "Kategorisiz" adlı kategoriye kaydedilecektir.*')
+                Text(AppLocalizations.of(context)!.words_without_category)
             ],
           ),
         ),

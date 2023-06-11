@@ -45,7 +45,7 @@ class WordsModel extends ChangeNotifier {
         example: newWord.example,
         createdAt: newWord.createdAt,
         isFavorite: newWord.isFavorite,
-        category: "Kategorisiz",
+        category: 'No Category'
       );
     }
     _words.add(newWord);
@@ -209,12 +209,12 @@ class WordsModel extends ChangeNotifier {
     int wordCount = _words.length;
     if (15 > wordCount &&
         wordCount >= 10 &&
-        !_achievements.contains('Yeni Başlayan')) {
-      _achievements.add('Yeni Başlayan');
-      showMotivationMessage('Tebrikler 10 Kelime Kaydettin!');
-    } else if (wordCount >= 50 && !_achievements.contains('ORTA Başlayan')) {
-      _achievements.add('ORTA Başlayan');
-      showMotivationMessage('Tebrikler 50 Kelime Kaydettin!');
+        !_achievements.contains('Beginner')) {
+      _achievements.add('Beginner');
+      showMotivationMessage('Congratulations You Saved 10 Words!');
+    } else if (wordCount >= 50 && !_achievements.contains('Intermediate')) {
+      _achievements.add('Intermediate');
+      showMotivationMessage('Congratulations You Saved 50 Words!');
     }
     // Diğer başarımlar için benzer koşullar ekle
   }

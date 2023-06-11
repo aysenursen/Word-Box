@@ -16,25 +16,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 }
 
   final List<Widget> _slides = [
-    Column(
+    const Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         Icon(Icons.language, size: 200),
         Text('Kelime Kumbarası', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         Text('İngilizce kelime öğrenmenin kolay yolu', style: TextStyle(fontSize: 16)),
       ],
     ),
-    Column(
+    const Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         Icon(Icons.quiz, size: 200),
         Text('Quiz ile Öğren', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         Text('Eklediğiniz kelimeleri quiz ile öğrenin', style: TextStyle(fontSize: 16)),
       ],
     ),
-    Column(
+    const Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         Icon(Icons.favorite, size: 200),
         Text('Favori Kelimeler', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         Text('En çok sevdiğiniz kelimeleri favorilere ekleyin', style: TextStyle(fontSize: 16)),

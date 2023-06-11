@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_words/models/words_model.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FavoriteWordsScreen extends StatelessWidget {
   @override
@@ -8,9 +9,9 @@ class FavoriteWordsScreen extends StatelessWidget {
     ThemeData themeData = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Favori Kelimeler',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        title: Text(
+          AppLocalizations.of(context)!.favorite_words,
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: themeData.primaryColor,
       ),
