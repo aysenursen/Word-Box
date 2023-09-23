@@ -8,8 +8,17 @@ class AnagramGame {
   int _currentIndex = -1;
   int _previousIndex = -1;
   String currentAnagram = '';
+  String _currentExample = '';
+  String word='';
 
   AnagramGame({required this.words});
+
+  String getExample(){
+    return _currentExample;
+  }
+  String getWord(){
+    return word;
+  }
 
   String _createAnagram(String word) {
     List<String> charList = word.split('');
@@ -42,6 +51,8 @@ class AnagramGame {
     _previousIndex = _currentIndex;
     _currentIndex = newIndex;
     currentAnagram = _createAnagram(words[_currentIndex].english);
+    _currentExample=words[_currentIndex].example;
+    word=words[_currentIndex].english;
   }
 
   bool checkAnswer(String answer) {

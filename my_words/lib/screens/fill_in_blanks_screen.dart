@@ -1,10 +1,12 @@
 import 'dart:math';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:my_words/models/words_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../models/theme_model.dart';
+import '../utilities/constants.dart';
 
 class FillInTheBlanksGame extends StatefulWidget {
   @override
@@ -14,6 +16,8 @@ class FillInTheBlanksGame extends StatefulWidget {
 class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
   String _currentWord = '';
   String _currentHint = '';
+  String _currentExample = '';
+  int isCorrect = -1;
   int _score = 0;
   int _currentIndex = -1;
   int _previousIndex = -1;
@@ -48,10 +52,12 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
 
       final word = wordsModel.words[_currentIndex].english;
       final hint = _generateHint(word);
+      final example = wordsModel.words[_currentIndex].example;
 
       setState(() {
         _currentWord = word;
         _currentHint = hint;
+        _currentExample = example;
       });
     }
   }
@@ -69,9 +75,19 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ConstantsColor.primaryBackGroundColor,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.fill_in_the_blank_game),
-        backgroundColor: Colors.purple,
+        title: Text(AppLocalizations.of(context)!.fill_in_the_blank_game,
+            style: ConstantsStyle.headingStyle),
+        backgroundColor: ConstantsColor.primaryColor,
+        toolbarHeight: 70,
+        elevation: 3,
+        shape: const ContinuousRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(166),
+            bottomRight: Radius.circular(166),
+          ),
+        ),
       ),
       body: _currentWord.isEmpty
           ? const Center(child: CircularProgressIndicator())
@@ -81,42 +97,122 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      AppLocalizations.of(context)!.score + ' : $_score',
-                      style: const TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      AppLocalizations.of(context)!.word + ': $_currentHint',
-                      style: const TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: _textController,
-                      decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context)!
-                            .write_your_answer_here,
-                        border: const OutlineInputBorder(),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.purple, width: 2.0),
+                    Center(
+                      child: Container(
+                        padding: EdgeInsets.all(15.0),
+                        decoration: BoxDecoration(
+                          color: ConstantsColor.primaryColor,
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        child: Text(
+                          AppLocalizations.of(context)!.score.toUpperCase() + ' : $_score',
+                          style: ConstantsStyle.secondaryTextStyle,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 50),
+                    Center(
+                      child: Container(
+                        padding: EdgeInsets.all(40.0),
+                        decoration: const BoxDecoration(
+                          color: ConstantsColor.primaryColor,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40.0),
+                            bottomRight: Radius.circular(40.0),
+                          ),
+                        ),
+                        child: Text(_currentHint,
+                            style: ConstantsStyle.headingStyle),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    Padding(
+                      padding: const EdgeInsets.only(left:8.0, bottom: 10),
+                      child: Text(
+                        'Cevabınız:',
+                        style: ConstantsStyle.primaryTextStyle,
+                      ),
+                    ),
+                    Center(
+                      child: TextField(
+                        controller: _textController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: ConstantsColor.primaryColor,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          prefixIcon: const Icon(
+                            Icons.edit,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     Center(
                       child: ElevatedButton(
                         onPressed: _checkAnswer,
-                        child: Text(AppLocalizations.of(context)!.your_answer),
+                        child: Text(AppLocalizations.of(context)!
+                            .your_answer
+                            .toUpperCase()),
                         style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.purple,
-                          textStyle: const TextStyle(fontSize: 18),
+                          foregroundColor: Colors.black,
+                          backgroundColor: ConstantsColor.primaryColor,
+                          textStyle: ConstantsStyle.secondaryTextStyle,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16.0, horizontal: 10.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32.0),
+                          ),
+                          elevation: 8,
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    if (isCorrect == 1)
+                      Container(
+                        padding: EdgeInsets.all(15),
+                        decoration: const BoxDecoration(
+                          color: ConstantsColor.mainColor,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(40.0),
+                            bottomLeft: Radius.circular(40.0),
+                          ),
+                        ),
+                        child: Center(
+                          child: AutoSizeText(
+                            _currentExample,
+                            style: ConstantsStyle.primaryTextStyle,
+                            maxLines: 4,
+                            minFontSize: 14,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    if (isCorrect == 0)
+                      Container(
+                        padding: EdgeInsets.all(15),
+                        decoration: const BoxDecoration(
+                          color: ConstantsColor.mainColor,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(40.0),
+                            bottomLeft: Radius.circular(40.0),
+                          ),
+                        ),
+                        child: Center(
+                          child: AutoSizeText(
+                            _currentWord,
+                            style: ConstantsStyle.primaryTextStyle,
+                            maxLines: 4,
+                            minFontSize: 14,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -161,6 +257,7 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
       );
       setState(() {
         _score++;
+        isCorrect = 1;
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -192,8 +289,16 @@ class _FillInTheBlanksGameState extends State<FillInTheBlanksGame> {
           duration: Duration(seconds: 1),
         ),
       );
+      setState(() {
+        isCorrect = 0;
+      });
     }
-    _textController.clear();
-    _generateWord();
+    Future.delayed(Duration(seconds: 2), () {
+      _textController.clear();
+      _generateWord();
+      setState(() {
+        isCorrect = -1;
+      });
+    });
   }
 }

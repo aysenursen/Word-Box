@@ -93,7 +93,7 @@ class _FlashcardState extends State<Flashcard>
             ),
             index: widget.index,
           );
-        }));
+        })); 
       },
       child: ConstrainedBox(
           constraints: BoxConstraints(

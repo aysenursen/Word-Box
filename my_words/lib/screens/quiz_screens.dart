@@ -1,9 +1,11 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:my_words/models/theme_model.dart';
 import 'package:my_words/models/words_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../states/quiz_state.dart';
+import '../utilities/constants.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -15,8 +17,8 @@ class QuizScreen extends StatefulWidget {
 class _QuizScreenState extends State<QuizScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _answerController = TextEditingController();
-
   late QuizState _quizState;
+  int isCorrect = -1;
 
   @override
   void initState() {
@@ -67,8 +69,7 @@ class _QuizScreenState extends State<QuizScreen> {
         );
         setState(() {
           _quizState.incrementScore();
-          _answerController.clear();
-          _quizState.generateNewQuestion();
+          isCorrect = 1;
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -101,27 +102,17 @@ class _QuizScreenState extends State<QuizScreen> {
           ),
         );
         setState(() {
-          _answerController.clear();
-          _quizState.generateNewQuestion();
+          isCorrect = 0;
         });
       }
+      Future.delayed(Duration(seconds: 3), () {
+        _answerController.clear();
+        _quizState.generateNewQuestion();
+        setState(() {
+          isCorrect = -1;
+        });
+      });
     }
-  }
-
-  InputDecoration _inputDecoration({required String labelText}) {
-    return InputDecoration(
-      labelText: labelText,
-      filled: true,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10.0),
-        borderSide: const BorderSide(),
-      ),
-      labelStyle: const TextStyle(color: Colors.white),
-      focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.white),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-    );
   }
 
   @override
@@ -131,68 +122,109 @@ class _QuizScreenState extends State<QuizScreen> {
     TextTheme textTheme = themeData.textTheme;
 
     return Scaffold(
+      backgroundColor: ConstantsColor.primaryBackGroundColor,
       appBar: AppBar(
         title: Text(
           'QUIZ',
-          style: textTheme.headline6
-              ?.copyWith(color: themeData.colorScheme.onPrimary),
+          style: ConstantsStyle.headingStyle,
         ),
-        backgroundColor: themeData.primaryColor,
+        centerTitle: true,
+        backgroundColor: ConstantsColor.primaryColor,
+        toolbarHeight: 70,
+        elevation: 3,
+        shape: const ContinuousRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(166),
+            bottomRight: Radius.circular(166),
+          ),
+        ),
       ),
       body: Consumer<WordsModel>(
         builder: (context, wordsModel, child) {
           _quizState.words = wordsModel.words;
           _quizState.generateNewQuestion();
-          return Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  themeData.primaryColorLight,
-                  themeData.primaryColorDark
-                ],
-              ),
-            ),
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Spacer(),
-                  CircleAvatar(
-                    radius: 100,
-                    backgroundColor: Colors.white70,
+          return Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 15,
+                ),
+                CircleAvatar(
+                  radius: 42,
+                  backgroundColor: ConstantsColor.primaryColor,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.star, size: 20, color: Colors.black),
+                      Text(
+                        AppLocalizations.of(context)!.score.toUpperCase() +
+                            ' : ${_quizState.score}',
+                        style: ConstantsStyle.secondaryTextStyle,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 36,
+                ),
+                if (_quizState.currentQuestion != null)
+                  Container(
+                    padding: const EdgeInsets.all(20.0),
+                    decoration: const BoxDecoration(
+                      color: ConstantsColor.primaryColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0),
+                      ),
+                    ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.question_answer,
-                            size: 50, color: themeData.primaryColor),
+                        Icon(Icons.menu_book),
                         Text(
-                          AppLocalizations.of(context)!.score +
-                              ' : ${_quizState.score}',
-                          style: textTheme.displayLarge?.copyWith(
-                              color: themeData.primaryColor, fontSize: 24),
+                          '${AppLocalizations.of(context)!.word}:',
+                          style: ConstantsStyle.primaryTextStyle,
+                        ),
+                        const SizedBox(
+                            width: 100,
+                            height: 20,
+                            child: Divider(
+                              color: Colors.black,
+                            )),
+                        Text(
+                          _quizState.currentQuestion!.english.toUpperCase(),
+                          style: ConstantsStyle.primaryTextStyle,
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 48),
-                  if (_quizState.currentQuestion != null)
-                    Text(
-                      AppLocalizations.of(context)!.question +
-                          ' : ${_quizState.currentQuestion!.english.toUpperCase()}',
-                      style: textTheme.headlineSmall
-                          ?.copyWith(color: Colors.white, fontSize: 24),
-                    ),
-                  const SizedBox(height: 32),
-                  TextFormField(
+                const SizedBox(height: 36),
+                Padding(
+                  padding: const EdgeInsets.only(left: 24.0, bottom: 10.0),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Cevabınız:',
+                        style: ConstantsStyle.primaryTextStyle,
+                      )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                  child: TextFormField(
                     controller: _answerController,
-                    decoration: _inputDecoration(
-                        labelText: AppLocalizations.of(context)!
-                            .write_your_answer_here),
-                    style: textTheme.bodyLarge?.copyWith(color: Colors.white),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: ConstantsColor.primaryColor,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.edit,
+                        color: Colors.black,
+                      ),
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter the answer in your native language';
@@ -200,30 +232,70 @@ class _QuizScreenState extends State<QuizScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _checkAnswer,
-                      child: Text(
-                        AppLocalizations.of(context)!.your_answer,
-                        style: textTheme.labelLarge
-                            ?.copyWith(color: themeData.colorScheme.onPrimary),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _checkAnswer,
+                  child: Text(
+                    AppLocalizations.of(context)!.your_answer.toUpperCase(),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    backgroundColor: ConstantsColor.primaryColor,
+                    textStyle: ConstantsStyle.secondaryTextStyle,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16.0, horizontal: 10.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32.0),
+                    ),
+                    elevation: 8,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                if (isCorrect == 1)
+                  Container(
+                    padding: EdgeInsets.all(15),
+                    decoration: const BoxDecoration(
+                      color: ConstantsColor.mainColor,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(40.0),
+                        bottomLeft: Radius.circular(40.0),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: themeData.colorScheme.onPrimary,
-                        backgroundColor: themeData.primaryColor,
-                        padding: const EdgeInsets.symmetric(vertical: 16.0),
-                        textStyle: const TextStyle(fontSize: 20),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                    ),
+                    child: Center(
+                      child: AutoSizeText(
+                        _quizState.currentQuestion!.example,
+                        style: ConstantsStyle.primaryTextStyle,
+                        maxLines: 4,
+                        minFontSize: 14,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
-                  const Spacer(),
-                ],
-              ),
+                if (isCorrect == 0)
+                  Container(
+                    padding: EdgeInsets.all(15),
+                    decoration: const BoxDecoration(
+                      color: ConstantsColor.mainColor,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(40.0),
+                        bottomLeft: Radius.circular(40.0),
+                      ),
+                    ),
+                    child: Center(
+                      child: AutoSizeText(
+                        _quizState.currentQuestion!.english,
+                        style: ConstantsStyle.primaryTextStyle,
+                        maxLines: 4,
+                        minFontSize: 14,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                //const Spacer(),
+              ],
             ),
           );
         },
